@@ -1,0 +1,31 @@
+body{
+	margin-bottom: 0px !important;
+}
+.container
+{
+	margin-bottom: 0px !important;
+}
+.row{
+	margin-top: 4% !important;
+	padding: 0px;
+}
+.text1
+{
+	font-size:90px !important;
+	font-weight: 100;
+	color: rgb(46, 34, 1);
+}
+.text2
+{
+	font-size:22px !important;
+	font-weight: 180;
+	color: rgb(136, 106, 6);
+	text-shadow: 20rem;
+}
+.imageHome
+{
+	width:80%;
+	height:50%;
+	margin-left: 20%;
+	margin-top: 20%;
+}
