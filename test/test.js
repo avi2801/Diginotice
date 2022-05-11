@@ -27,4 +27,41 @@ contract('Diginotice', ([deployer, author, tipper]) => {
             assert.equal(name, 'Diginotice')
         })
     })
+    describe('posts', async () => {
+        let result, postCount
+        const message = 'abc123123123'
+
+        before(async () => {
+          result = await diginotice.uploadImage(hash, 'Post description', { from: author })
+          postCount = await diginotice.postCount()
+        })
+
+        it('creates posts', async () => {
+            // SUCESS
+            assert.equal(postCount, 1)
+            const event = result.logs[0].args
+            assert.equal(event.id.toNumber(), postCount.toNumber(), 'id is correct')
+            assert.equal(event.message, message, 'Message is correct')
+            assert.equal(event.teacher, teacher, 'teacher is correct')
+            assert.equal(event.year, year, 'year is correct')
+            assert.equal(event.author, author, 'author is correct')
+
+
+            // FAILURE: Post must have hash
+            await diginotice.uploadImage('', 'Post description', { from: author }).should.be.rejected;
+
+            // FAILURE: Post must have description
+            await diginotice.uploadImage('Post hash', '', { from: author }).should.be.rejected;
+        })
+        // from struct
+
+        it('lists posts', async () => {
+            const post = await diginotice.posts(postCount)
+            assert.equal(post.id.toNumber(), postCount.toNumber(), 'id is correct')
+            assert.equal(post.message, message, 'Message is correct')
+            assert.equal(post.teacher, 'teacher is correct')
+            assert.equal(post.year, 'year is correct')
+            assert.equal(post.author, author, 'author is correct')
+          })
+    })
 })
