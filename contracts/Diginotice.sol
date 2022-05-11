@@ -4,24 +4,7 @@ pragma solidity ^0.8.10;
 //this is the Digital notice smartcontract
 contract Diginotice {
     string public name = "Diginotice";
-<<<<<<< HEAD
 
-    // //Store posts
-    // mapping(uint => Post) public posts;
-
-    // struct Post{
-    //     uint id;
-    //     string hash;
-    //     string description;
-    //     address author;
-    // }
-    // //Create posts
-    // function uploadImage() public {
-    //     posts[1] = Post(1, 'abc123', 'Hello',address(0x0));
-    // }
-
-=======
-    
     //Store posts
     uint public postCount = 0;
     mapping(uint => Post) public posts;
@@ -60,7 +43,6 @@ contract Diginotice {
         emit PostCreated(postCount, _message, _teacher, _year, msg.sender);
 
     }
-    
->>>>>>> 5124afa4a7144e8cfdaa70c3468e566a3df9dac5
+
     //Comments
 }
