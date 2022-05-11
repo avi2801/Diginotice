@@ -24,7 +24,7 @@ import '../Css/Home.css'
 					</div>
 
 					<div className='col-sm-6 '>
-						<MDBAnimation type='slideInRight' duration='2s'>
+						<MDBAnimation type='slideInLeft' duration='2s'>
 							<img src={home} className='imageHome' alt="" />
 						</MDBAnimation>
 					</div>

@@ -16,5 +16,36 @@ margin-bottom: 5%;
 .addButton
 {
 	width: 100%;
-	
+
+}
+.card-title
+{
+	font-size: 1.7rem !important;
+	font-weight: 2.5rem !important;
+	color: rgb(150, 110, 0) !important;
+}
+.yearPara
+{
+	font-size: 1.3rem !important;
+	color: rgb(90, 2, 2) !important;
+
+}
+
+.nContent
+{
+	font-size: 1.1rem !important;
+	font-weight: 2.5rem !important;
+	color: rgb(39, 29, 1) !important;
+
+}
+
+.nDesig
+{
+	font-size: 1rem !important;
+	font-weight: 2.5rem !important;
+	color: rgb(39, 29, 1) !important;
+}
+.modal-dialog .modal-content
+{
+	width:100% !important;
 }
