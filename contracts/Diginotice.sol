@@ -7,6 +7,7 @@ contract Diginotice {
     
     //Store posts
     uint public postCount = 0;
+
     mapping(uint => Post) public posts;
 
 
@@ -34,7 +35,7 @@ contract Diginotice {
         require(bytes(_teacher).length > 0);
         require(msg.sender != address(0x0));
 
-        postCount = postCount++;
+        postCount++;
 
         //add post to contracr
         posts[postCount] = Post(postCount, _message, _teacher,_year, msg.sender);
