@@ -1,7 +1,7 @@
 const { assert } = require('chai')
 
 const Diginotice = artifacts.require("../contracts/Diginotice")
-
+require('@nomiclabs/hardhat-truffle5')
 require('chai')
     .use(reqiure('chai-as-promised'))
     .should()
