@@ -1,14 +1,55 @@
 import React, { Component } from 'react';
 import { Form, Button, Modal } from "react-bootstrap";
-
+import Diginotice from '../abis/Diginotice.json';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Css/NoticeBoard.css'
-import login1 from '../Images/login1.svg'
+import Web3 from 'web3'
 class NoticeBoard extends Component {
+
+	async componentDidMount() {
+		this.loadWeb3()
+		this.loadBlockchainData()
+	  }
+	  async loadWeb3() {
+		if (window.ethereum) {
+		  window.Web3 = new Web3(window.ethereum)
+		  await window.ethereum.enable()
+		}
+		else if (window.Web3) {
+		  window.Web3 = new Web3(window.web3.currentProvider)
+		}
+		else {
+		  window.alert("Non ethereum project detected")
+		}
+	  }
+	  async loadBlockchainData() {
+		const web3 = window.Web3
+		const accounts = await new web3.eth.getAccounts()
+		//console.log(accounts[0])
+		this.setState({
+		  account: accounts[0]
+		})
+		const networkId = await web3.eth.net.getId()
+		const networkData = Diginotice.networks[networkId]
+
+		if (networkData) {
+		  const diginotice =  new web3.eth.Contract(Diginotice.abi, networkData.address)
+		  this.setState({ diginotice })
+		  const postCount = await diginotice.methods.postCount().call()
+		  this.setState({ postCount })
+		  this.setState({ loading: false })
+		} else {
+		  window.alert('Diginotice contract is not deployed to detected network')
+		}
+	  }
 	constructor(props) {
 		super(props)
 
 		this.state = {
+			account: '',
+			diginotice: null,
+			posts: [],
+			loading: true,
 			click: false,
 			year: null,
 			designation: '',
@@ -23,28 +64,11 @@ class NoticeBoard extends Component {
 			show: false
 		}
 	}
-	changeYear = (event) => {
+	changeData = (event) => {
 		this.setState({
-			year: event.target.value
+			[event.target.name]: event.target.value
 		})
 
-	}
-	changeDesig = (event) => {
-		this.setState({
-			designation: event.target.value
-		})
-
-	}
-	changeContent = (event) => {
-		this.setState({
-			content: event.target.value,
-
-		})
-	}
-	changeTitle = (event) => {
-		this.setState({
-			title:event.target.value
-		})
 	}
 	changeF = () => {
 		this.setState({
@@ -63,10 +87,10 @@ class NoticeBoard extends Component {
 		const desig1 = this.state.designation;
 		const content1 = this.state.content;
 		const title = this.state.title
-		const obj = {'title':title, 'year': name1, 'designation': desig1, 'content': content1 };
+		const obj = { 'title': title, 'year': name1, 'designation': desig1, 'content': content1 };
 		this.setState({
 			list1: [...this.state.list1, obj],
-			show:false
+			show: false
 		})
 
 	}
@@ -81,7 +105,7 @@ class NoticeBoard extends Component {
 						<div className="col-8">
 							<h1>Dayananda Sagar College of Engineering</h1>
 							<h3>ISE Department</h3>
-							<Button className="addButton"  onClick={this.changeF}>
+							<Button className="addButton" onClick={this.changeF}>
 								Add New Item
 							</Button>
 							<div className="card card-arrangement" >
@@ -125,8 +149,8 @@ class NoticeBoard extends Component {
 										<Form.Group className="mb-3" controlId="formBasicText">
 											<Form.Label>Select the academic year</Form.Label>
 											<Form.Select
-												value={this.state.year} onChange={this.changeYear}
-												>
+												value={this.state.year} name="year" onChange={this.changeData}
+											>
 												<option value="1st">1st</option>
 												<option value="2nd">2nd</option>
 												<option value="3rd">3rd</option>
@@ -140,8 +164,8 @@ class NoticeBoard extends Component {
 										</Form.Group>
 										<Form.Group className="mb-3" controlId="formBasicText">
 											<Form.Label>Title for the notice</Form.Label>
-											<Form.Control type="text" placeholder="Write the title"
-												value={this.state.title} onChange={this.props.captureFile} />
+											<Form.Control type="text" placeholder="Write the title" name="title"
+												value={this.state.title} onChange={this.changeData} />
 											{/* <Form.Text className="text-muted">
 									                 We'll never share your email with anyone else.
 								            </Form.Text> */}
@@ -150,12 +174,13 @@ class NoticeBoard extends Component {
 										<Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
 											<Form.Label>Enter the content</Form.Label>
 											<Form.Control as="textarea" rows={3}
-												value={this.state.content} onChange={this.changeContent} />
+												value={this.state.content} name="content" onChange={this.changeData} />
 										</Form.Group>
 										<Form.Group className="mb-3" controlId="formBasicText">
 											<Form.Label>Designation</Form.Label>
 											<Form.Control type="text" placeholder="Enter your designation"
-												value={this.state.designation} onChange={this.changeDesig} />
+												name="designation"
+												value={this.state.designation} onChange={this.changeData} />
 
 										</Form.Group>
 									</Form>
