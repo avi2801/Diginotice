@@ -11,10 +11,10 @@ const Navbar1 = (props) => {
 	const toggle = () => setIsOpen(!isOpen);
 	return (
 		<div >
-			<Navbar color="warning" light-expand="md">
+			<Navbar className="navbarColor" light-expand="md">
 				<NavbarBrand className="links" href="/">
 					<img src={logo} width="50" height="50" class="d-inline-block align-top " alt=""/>
-					
+					Diginotice
 				</NavbarBrand>
 					<NavbarToggler onClick={toggle} />
 					<Collapse isOpen={isOpen} navbar></Collapse>

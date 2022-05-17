@@ -3,7 +3,7 @@ pragma solidity ^0.8.10;
 
 //this is the Digital notice smartcontract
 contract Diginotice {
-    string public name = "Diginotice";
+    string public name;
 
     //Store posts
     uint public postCount = 0;
@@ -26,6 +26,9 @@ contract Diginotice {
         address author
     );
 
+    constructor() public {
+        name = "Diginotice";
+    }
 
     //Create posts
     function addPost(string memory _message, string memory _year, string memory _teacher) public {
@@ -35,7 +38,7 @@ contract Diginotice {
         require(bytes(_teacher).length > 0);
         require(msg.sender != address(0x0));
 
-        postCount = postCount++;
+        postCount++;
 
         //add post to contracr
         posts[postCount] = Post(postCount, _message, _teacher,_year, msg.sender);

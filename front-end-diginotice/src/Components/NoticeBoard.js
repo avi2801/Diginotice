@@ -14,21 +14,15 @@ class NoticeBoard extends Component {
 
 		this.state = {
 			account: '',
-			diginotice:null,
-			postCount:null,
-			posts: [],
+			diginotice: null,
+			postCount: null,
 			loading: true,
 			click: false,
 			year: null,
 			designation: '',
 			content: " ",
 			title: " ",
-			list1: [{
-				title: 'Notice',
-				year: "2nd",
-				designation: "Teacher",
-				content: "2nd year has to present on 13th of may ",
-			}],
+			posts: [],
 			show: false
 		}
 	}
@@ -56,22 +50,21 @@ class NoticeBoard extends Component {
 			account: accounts[0]
 		})
 		const networkId = await web3.eth.net.getId()
-		//console.log(networkId)
 		const networkData = Diginotice.networks[networkId]
-		//console.log(networkData)
-		//const diginotice = new web3.eth.Contract(Diginotice.abi, networkData.address)
-
-		//console.log(postCount)
 		if (networkData) {
 			const diginotice = new web3.eth.Contract(Diginotice.abi, networkData.address)
 			const postCount = await diginotice.methods.postCount().call()
-			//console.log(postCount)
 			this.setState({ diginotice })
-
-
 			this.setState({ postCount })
 			console.log(postCount)
-			// this.setState({ loading: false })
+			for (var i = 1; i <= postCount; i++) {
+				const post = await diginotice.methods.posts(i).call()
+				console.log(post)
+				this.setState({
+					posts: [...this.state.posts, post]
+				})
+			}
+			console.log("this is where the post is getting printed", this.state.posts)
 		}
 		else {
 			window.alert("Diginotice contract is not deployed to detected network")
@@ -95,31 +88,24 @@ class NoticeBoard extends Component {
 			show: false
 		})
 	}
-	addData =(e )=> {
+	addData = (e) => {
 		e.preventDefault()
 		const year1 = this.state.year;
 		const desig1 = this.state.designation;
 		const content1 = this.state.content;
 		const title = this.state.title
-		const obj = { 'title': title, 'year': year1, 'designation': desig1, 'content': content1 };
-		this.setState({
-			list1: [...this.state.list1, obj],
-			show: false
-		})
+
 		console.log(content1)
 		console.log(year1)
 		console.log(desig1)
 		console.log(this.state.diginotice)
 		this.state.diginotice.methods.addPost(content1, year1, desig1).send({ from: this.state.account })
 			.once('receipt', (receipt) => {
-				this.setState({ loading: false })
+				
 				console.log("BlockChain worked!")
 			});
 
-
 	}
-
-
 	render() {
 		if (this.state.loading) {
 			return (
@@ -134,30 +120,32 @@ class NoticeBoard extends Component {
 								<Button className="addButton" onClick={this.changeF}>
 									Add New Item
 								</Button>
-								<div className="card card-arrangement" >
+								{/* <div className="card card-arrangement" >
 									<div className="card-body">
-										{/* <img class="card-img-top" src={login1} alt="Card image cap" /> */}
+
 										<h5 className="card-title">Announcement</h5>
 										<p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-										{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
+
 									</div>
-								</div>
-								<div className="card card-arrangement" >
+								</div> */}
+								{/* <div className="card card-arrangement" >
 									<div className="card-body">
 										<h5 className="card-title">Notice regarding project submission</h5>
 										<p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-										{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
-									</div>
-								</div>
 
-								<div>{this.state.list1.map(function (l1, index) {
+									</div>
+								</div> */}
+
+								<div>{this.state.posts.map(function (p1,key) {
 									return (
 										<div className="card card-arrangement" >
 											<div className="card-body">
-												<h5 className="card-title">{l1.title}</h5>
-												<p className="card-text">{l1.year}</p>
-												<p className="card-text">{l1.content}</p>
-												<p className="card-text">{l1.designation}</p>
+												<h5 className="card-title">{p1.title}</h5>
+												<span>Message:<p className="card-text">{p1.message}</p></span>
+												<br/>
+												<span>Designation: <p className="card-text">{p1.teacher}</p></span>
+												<br/>
+												<span>Year: <p className="card-text">{p1.year}</p></span>
 
 												{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
 											</div>
@@ -211,7 +199,7 @@ class NoticeBoard extends Component {
 											</Form.Group>
 										</Form>
 										<Modal.Footer>
-										<Button variant="warning" type="submit" onClick={this.addData} >
+											<Button variant="warning" type="submit" onClick={this.addData} >
 												Submit
 											</Button>
 
