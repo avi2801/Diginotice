@@ -26,6 +26,7 @@ contract Diginotice {
         address author
     );
 
+
     //Create posts
     function addPost(string memory _message, string memory _year, string memory _teacher) public {
 
