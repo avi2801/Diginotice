@@ -13,13 +13,13 @@ body{
 {
 	font-size:90px !important;
 	font-weight: 100;
-	color: rgb(46, 34, 1);
+	color: #14213D;
 }
 .text2
 {
 	font-size:22px !important;
-	font-weight: 180;
-	color: rgb(136, 106, 6);
+	font-weight: 190;
+	color: #14213D;
 	text-shadow: 20rem;
 }
 .imageHome

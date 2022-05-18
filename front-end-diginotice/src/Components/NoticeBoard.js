@@ -101,9 +101,18 @@ class NoticeBoard extends Component {
 		console.log(this.state.diginotice)
 		this.state.diginotice.methods.addPost(content1, year1, desig1).send({ from: this.state.account })
 			.once('receipt', (receipt) => {
-				
+				this.setState({
+					year: "",
+					designation: "",
+					content: " ",
+					title: " ",
+					show:false
+
+
+				})
 				console.log("BlockChain worked!")
 			});
+			window.location.reload(false)
 
 	}
 	render() {
@@ -115,8 +124,8 @@ class NoticeBoard extends Component {
 							<div className='col-2'>
 							</div>
 							<div className="col-8">
-								<h1>Dayananda Sagar College of Engineering</h1>
-								<h3>ISE Department</h3>
+								<h1 className="text-center">Dayananda Sagar College of Engineering</h1>
+								<h3 className="text-center">ISE Department</h3>
 								<Button className="addButton" onClick={this.changeF}>
 									Add New Item
 								</Button>
