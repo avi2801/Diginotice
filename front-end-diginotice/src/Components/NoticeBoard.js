@@ -57,6 +57,7 @@ class NoticeBoard extends Component {
 			this.setState({ diginotice })
 			this.setState({ postCount })
 			console.log(postCount)
+			console.log(this.state.diginotice)
 			for (var i = 1; i <= postCount; i++) {
 				const post = await diginotice.methods.posts(i).call()
 				console.log(post)
@@ -89,7 +90,7 @@ class NoticeBoard extends Component {
 		})
 	}
 	addData = (e) => {
-		e.preventDefault()
+		//e.preventDefault()
 		const year1 = this.state.year;
 		const desig1 = this.state.designation;
 		const content1 = this.state.content;
@@ -102,17 +103,18 @@ class NoticeBoard extends Component {
 		this.state.diginotice.methods.addPost(content1, year1, desig1).send({ from: this.state.account })
 			.once('receipt', (receipt) => {
 				this.setState({
-					year: "",
+					year: "First - 1st",
 					designation: "",
 					content: " ",
 					title: " ",
-					show:false
+					img1: null,
+					show: false
 
 
 				})
 				console.log("BlockChain worked!")
 			});
-			window.location.reload(false)
+		//window.location.reload(false)
 
 	}
 	render() {
@@ -127,7 +129,7 @@ class NoticeBoard extends Component {
 								<h1 className="text-center">Dayananda Sagar College of Engineering</h1>
 								<h3 className="text-center">ISE Department</h3>
 								<Button className="addButton" onClick={this.changeF}>
-									Add New Item
+									New Notice or Announcement
 								</Button>
 								{/* <div className="card card-arrangement" >
 									<div className="card-body">
@@ -145,16 +147,14 @@ class NoticeBoard extends Component {
 									</div>
 								</div> */}
 
-								<div>{this.state.posts.map(function (p1,key) {
+								<div>{this.state.posts.reverse().map(function (p1, key) {
 									return (
 										<div className="card card-arrangement" >
 											<div className="card-body">
 												<h5 className="card-title">{p1.title}</h5>
-												<span>Message:<p className="card-text">{p1.message}</p></span>
-												<br/>
-												<span>Designation: <p className="card-text">{p1.teacher}</p></span>
-												<br/>
-												<span>Year: <p className="card-text">{p1.year}</p></span>
+												<p className="card-text"><span id='year'>Year</span>{p1.year}</p>
+												<p className="card-text"><span id='message'>Message </span>{p1.message}</p>
+												<p className="card-text"><span id='designation'>Designation </span>{p1.teacher}</p>
 
 												{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
 											</div>
@@ -174,10 +174,10 @@ class NoticeBoard extends Component {
 												<Form.Select
 													value={this.state.year} name="year" onChange={this.changeData}
 												>
-													<option value="1st">1st</option>
-													<option value="2nd">2nd</option>
-													<option value="3rd">3rd</option>
-													<option value="4th">4th</option>
+													<option value="1st" >First - 1st</option>
+													<option value="2nd">Second- 2nd</option>
+													<option value="3rd">Third -3rd</option>
+													<option value="4th">Fourth - 4th</option>
 												</Form.Select>
 												{/* <Form.Control type="number" placeholder="Enter the academic year"
 													value={this.state.year} onChange={this.changeInput} /> */}
@@ -204,6 +204,12 @@ class NoticeBoard extends Component {
 												<Form.Control type="text" placeholder="Enter your designation"
 													name="designation"
 													value={this.state.designation} onChange={this.changeData} />
+											</Form.Group>
+											<Form.Group>
+												<Form.Label>Upload any Image</Form.Label>
+												<Form.Control type="file" placeholder="Uplaod image if required"
+													name="img1" value={this.state.img1} onChange={this.changeData} />
+
 
 											</Form.Group>
 										</Form>

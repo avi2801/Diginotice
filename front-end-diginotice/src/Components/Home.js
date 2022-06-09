@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { MDBAnimation } from "mdbreact";
-import home from '../Images/home.svg'
+import home from '../Images/home2.svg'
 import '../Css/Home.css'
  class Home extends Component {
   render() {

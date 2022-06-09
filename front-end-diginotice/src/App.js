@@ -5,6 +5,7 @@ import NoticeBoard from './Components/NoticeBoard'
 import Navbar1 from './Components/Navbar1';
 import Home from './Components/Home';
 import Login from './Components/Login';
+import SignUp from './Components/SignUp';
 
 
 
@@ -19,12 +20,12 @@ class App extends Component {
     return (
 
       <div>
-
       <Navbar1 />
       <BrowserRouter history={history}>
         <Route exact path="/" component={Home} />
         <Route path="/noticeboard" component={NoticeBoard}  />
-        <Route path="/login" component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path= "/signup" component={SignUp}/>
         </BrowserRouter >
         </div>
 
@@ -35,3 +36,4 @@ class App extends Component {
 }
 
 export default App;
+//2666FA

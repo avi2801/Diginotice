@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Form, Button, Image } from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import img from '../Images/login1.svg';
-import '../Css/Login.css';
+import { Form, Button, Image } from 'react-bootstrap';
 import { MDBAnimation } from "mdbreact";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import img from '../Images/login3.svg';
+import '../Css/Login.css';
 
 
 
@@ -22,14 +22,14 @@ function Login() {
 		<div className="container top mb-9 ">
 			<h1 className="heading">DigiNotice</h1>
 			<div className="row  justify-content-center align-items-center form-back border shadow">
-
 				<div className='col-md-6 d-none d-sm-block border-right'>
-					<MDBAnimation type='slideInLeft' duration='3s'>
+					<MDBAnimation type="slideInLeft" duration="2s">
+
 						<Image className="border-right border-black img1" src={img} rounded />
 					</MDBAnimation>
 				</div>
 				<div className="col-md-5 col-sm-12 m-sm-2 ">
-					<MDBAnimation type='slideInRight' duration='3s'>
+					<MDBAnimation type="slideInRight" duration="2s">
 						<h3 className='heading'>Login</h3>
 						<Form onSubmit={handleSubmit} >
 							<Form.Group className="mb-3" controlId="formBasicEmail">
@@ -52,7 +52,7 @@ function Login() {
 								<Form.Check className="mt-2" type="checkbox" label="Remember Me!" />
 							</Form.Group>
 
-							<Button variant='warning' className="loginButton" type="submit" >
+							<Button className="loginButton" type="submit" >
 								Submit
 							</Button>
 							<div >
