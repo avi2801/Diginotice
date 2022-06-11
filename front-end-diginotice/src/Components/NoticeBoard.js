@@ -94,13 +94,16 @@ class NoticeBoard extends Component {
 		const year1 = this.state.year;
 		const desig1 = this.state.designation;
 		const content1 = this.state.content;
-		const title = this.state.title
+		const title = this.state.title;
+
+		const img1 = this.state.img1
 
 		console.log(content1)
 		console.log(year1)
 		console.log(desig1)
+		console.log(img1)
 		console.log(this.state.diginotice)
-		this.state.diginotice.methods.addPost(content1, year1, desig1).send({ from: this.state.account })
+		this.state.diginotice.methods.addPost(content1, year1, desig1,img1).send({ from: this.state.account })
 			.once('receipt', (receipt) => {
 				this.setState({
 					year: "First - 1st",
@@ -155,6 +158,7 @@ class NoticeBoard extends Component {
 												<p className="card-text"><span id='year'>Year</span>{p1.year}</p>
 												<p className="card-text"><span id='message'>Message </span>{p1.message}</p>
 												<p className="card-text"><span id='designation'>Designation </span>{p1.teacher}</p>
+												<img src={p1.img1} alt="img"/>
 
 												{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
 											</div>
