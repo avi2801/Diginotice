@@ -16,7 +16,7 @@ contract Diginotice {
         string teacher;
         string year;
         address author;
-        string image;
+        string imageHash;
     }
 
     event PostCreated(
@@ -25,7 +25,7 @@ contract Diginotice {
         string teacher,
         string year,
         address author,
-        string image
+        string imageHash
     );
 
     constructor() public {

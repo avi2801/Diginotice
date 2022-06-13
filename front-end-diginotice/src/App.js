@@ -6,9 +6,6 @@ import Navbar1 from './Components/Navbar1';
 import Home from './Components/Home';
 import Login from './Components/Login';
 import SignUp from './Components/SignUp';
-
-
-
 import { Component } from 'react';
 
 

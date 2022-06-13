@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button, Modal, ThemeProvider } from "react-bootstrap";
 import Diginotice from '../abis/Diginotice.json';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Css/NoticeBoard.css'
 import Web3 from 'web3'
+const ipfsClient = require('ipfs-http-client');
+const ipfs = ipfsClient({host:'ipfs.infura.io',port:5001,protocol:'https'})
 class NoticeBoard extends Component {
 	async componentDidMount() {
 		this.loadWeb3()
@@ -18,11 +20,13 @@ class NoticeBoard extends Component {
 			postCount: null,
 			loading: true,
 			click: false,
-			year: null,
+			year: '1st',
 			designation: '',
 			content: " ",
 			title: " ",
+			img:" ",
 			posts: [],
+			result1:[],
 			show: false
 		}
 	}
@@ -89,6 +93,19 @@ class NoticeBoard extends Component {
 			show: false
 		})
 	}
+	captureFile = event => {
+		event.preventDefault()
+		const file = event.target.files[0]
+		const r = new window.FileReader()
+		r.readAsArrayBuffer(file)
+
+		r.onloadend = () => {
+			this.setState({ buffer: Buffer(r.result) })
+			console.log('buffer',this.state.buffer)
+		}
+
+
+	}
 	addData = (e) => {
 		//e.preventDefault()
 		const year1 = this.state.year;
@@ -101,22 +118,35 @@ class NoticeBoard extends Component {
 		console.log(content1)
 		console.log(year1)
 		console.log(desig1)
-		console.log(img1)
+		//console.log(img1)
 		console.log(this.state.diginotice)
-		this.state.diginotice.methods.addPost(content1, year1, desig1,img1).send({ from: this.state.account })
+
+		//ipfs
+		ipfs.add(this.state.buffer, (error, result) => {
+			console.log('ipfs result',result)
+			if (error) {
+				console.log(error)
+				return
+			}
+			this.state.diginotice.methods.addPost(content1, year1, desig1,result[0].hash).send({ from: this.state.account })
 			.once('receipt', (receipt) => {
 				this.setState({
-					year: "First - 1st",
-					designation: "",
-					content: " ",
-					title: " ",
-					img1: null,
+					// year: "First - 1st",
+					// designation: "",
+					// content: " ",
+					// title: " ",
+					// img1: " ",
 					show: false
 
 
 				})
 				console.log("BlockChain worked!")
+				window.location.reload(false)
 			});
+		})
+
+
+
 		//window.location.reload(false)
 
 	}
@@ -151,14 +181,15 @@ class NoticeBoard extends Component {
 								</div> */}
 
 								<div>{this.state.posts.reverse().map(function (p1, key) {
+									console.log(p1)
 									return (
 										<div className="card card-arrangement" >
 											<div className="card-body">
+											<img className="card-img" src={`https://ipfs.infura.io/ipfs/${p1.imageHash}`} alt="img"/>
 												<h5 className="card-title">{p1.title}</h5>
 												<p className="card-text"><span id='year'>Year</span>{p1.year}</p>
 												<p className="card-text"><span id='message'>Message </span>{p1.message}</p>
 												<p className="card-text"><span id='designation'>Designation </span>{p1.teacher}</p>
-												<img src={p1.img1} alt="img"/>
 
 												{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
 											</div>
@@ -212,7 +243,7 @@ class NoticeBoard extends Component {
 											<Form.Group>
 												<Form.Label>Upload any Image</Form.Label>
 												<Form.Control type="file" placeholder="Uplaod image if required"
-													name="img1" value={this.state.img1} onChange={this.changeData} />
+													name="img1" value={this.state.img1} onChange={this.captureFile} />
 
 
 											</Form.Group>
