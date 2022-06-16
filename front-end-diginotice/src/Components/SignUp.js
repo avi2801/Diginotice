@@ -3,13 +3,9 @@ import { Form, Button, Image } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import img from '../Images/login4.svg';
 import '../Css/SignUp.css';
-import { MDBAnimation } from "mdbreact";
+// import { MDBAnimation } from "mdbreact";
 
-import { FormControl, InputLabel, Input, FormHelperText } from '@mui/material';
-
-
-
-
+// import { FormControl, InputLabel, Input, FormHelperText } from '@mui/material';
 
 function SignUp() {
 	const [fullName, setfullName] = useState("");

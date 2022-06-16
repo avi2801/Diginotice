@@ -17,6 +17,8 @@ contract Diginotice {
         string year;
         address author;
         string imageHash;
+        string date;
+        string time;
     }
 
     event PostCreated(
@@ -25,7 +27,9 @@ contract Diginotice {
         string teacher,
         string year,
         address author,
-        string imageHash
+        string imageHash,
+        string date,
+        string time
     );
 
     constructor() public {
@@ -33,7 +37,8 @@ contract Diginotice {
     }
 
     //Create posts
-    function addPost(string memory _message, string memory _year, string memory _teacher,string memory _image) public {
+    function addPost(string memory _message, string memory _year, string memory _teacher,string memory _image,string memory _date,
+        string memory _time) public {
 
         require(bytes(_message).length > 0);
         require(bytes(_year).length > 0);
@@ -43,10 +48,10 @@ contract Diginotice {
         postCount++;
 
         //add post to contracr
-        posts[postCount] = Post(postCount, _message, _teacher,_year, msg.sender,_image);
+        posts[postCount] = Post(postCount, _message, _teacher,_year, msg.sender,_image,_date,_time);
 
         //trigger an event
-        emit PostCreated(postCount, _message, _teacher, _year, msg.sender,_image);
+        emit PostCreated(postCount, _message, _teacher, _year, msg.sender,_image,_date,_time);
 
     }
 

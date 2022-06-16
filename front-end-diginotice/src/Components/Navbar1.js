@@ -22,12 +22,12 @@ const Navbar1 = (props) => {
 						<NavItem>
 						<NavLink className="links" href="/login">Login</NavLink>
 						</NavItem>
-						<NavItem>
+						{/* <NavItem>
 							<NavLink className="links" href="/signup">Sign Up</NavLink>
 						</NavItem>
 						<NavItem>
 							<NavLink className="links" href="/noticeboard">Notice Board</NavLink>
-						</NavItem>
+						</NavItem> */}
 					</Nav >
 			</Navbar>
 		</div>

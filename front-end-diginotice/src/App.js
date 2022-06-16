@@ -20,9 +20,9 @@ class App extends Component {
       <Navbar1 />
       <BrowserRouter history={history}>
         <Route exact path="/" component={Home} />
-        <Route path="/noticeboard" component={NoticeBoard}  />
-          <Route path="/login" component={Login} />
-          <Route path= "/signup" component={SignUp}/>
+        {/* <Route path="/noticeboard" component={NoticeBoard}  /> */}
+          <Route path="/login" component={NoticeBoard} />
+          {/* <Route path= "/signup" component={SignUp}/> */}
         </BrowserRouter >
         </div>
 

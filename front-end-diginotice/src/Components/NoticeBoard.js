@@ -26,7 +26,8 @@ class NoticeBoard extends Component {
 			title: " ",
 			img:" ",
 			posts: [],
-			result1:[],
+			result1: [],
+			date:'',
 			show: false
 		}
 	}
@@ -42,6 +43,7 @@ class NoticeBoard extends Component {
 		}
 		else {
 			window.alert("Non ethereum project detected")
+			window.location.href = "http://localhost:3000"
 		}
 	}
 	async loadBlockchainData() {
@@ -53,6 +55,20 @@ class NoticeBoard extends Component {
 		this.setState({
 			account: accounts[0]
 		})
+		console.log(accounts[0])
+		const teacher = "0xD8Cfd4F64106C80992d6A67943c0379ddEfd5306";
+		const student = "0x3a2856F9515f61bD45DBDcF1AAf87Bcb341705C0";
+		if (accounts[0] === teacher)
+		{
+			this.setState({
+				designation: "Avinash"
+			})
+		}
+		else  {
+			this.setState({
+				designation:"Iraa"
+			})
+		}
 		const networkId = await web3.eth.net.getId()
 		const networkData = Diginotice.networks[networkId]
 		if (networkData) {
@@ -74,6 +90,12 @@ class NoticeBoard extends Component {
 		else {
 			window.alert("Diginotice contract is not deployed to detected network")
 		}
+	}
+
+	accounts = () => {
+
+
+
 	}
 
 	changeData = (event) => {
@@ -112,8 +134,11 @@ class NoticeBoard extends Component {
 		const desig1 = this.state.designation;
 		const content1 = this.state.content;
 		const title = this.state.title;
-
+		const date = this.state.date;
 		const img1 = this.state.img1
+
+		// adding current date and time to the post
+
 
 		console.log(content1)
 		console.log(year1)
@@ -123,12 +148,16 @@ class NoticeBoard extends Component {
 
 		//ipfs
 		ipfs.add(this.state.buffer, (error, result) => {
-			console.log('ipfs result',result)
+			console.log('ipfs result', result)
+			const current = new Date();
+			const date1 = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
+			const time1 = `${current.getHours()}:${current.getMinutes()}`;
+			console.log(date1);
 			if (error) {
 				console.log(error)
 				return
 			}
-			this.state.diginotice.methods.addPost(content1, year1, desig1,result[0].hash).send({ from: this.state.account })
+			this.state.diginotice.methods.addPost(content1, year1, desig1,result[0].hash,date1,time1).send({ from: this.state.account })
 			.once('receipt', (receipt) => {
 				this.setState({
 					// year: "First - 1st",
@@ -185,6 +214,8 @@ class NoticeBoard extends Component {
 									return (
 										<div className="card card-arrangement" >
 											<div className="card-body">
+												<p>{p1.date}</p>
+												<p>{p1.time}</p>
 											<img className="card-img" src={`https://ipfs.infura.io/ipfs/${p1.imageHash}`} alt="img"/>
 												<h5 className="card-title">{p1.title}</h5>
 												<p className="card-text"><span id='year'>Year</span>{p1.year}</p>
@@ -235,10 +266,9 @@ class NoticeBoard extends Component {
 													value={this.state.content} name="content" onChange={this.changeData} />
 											</Form.Group>
 											<Form.Group className="mb-3" controlId="formBasicText">
-												<Form.Label>Designation</Form.Label>
-												<Form.Control type="text" placeholder="Enter your designation"
-													name="designation"
-													value={this.state.designation} onChange={this.changeData} />
+												<Form.Label>Name</Form.Label>
+												<Form.Control type="text"
+													value={this.state.designation}  />
 											</Form.Group>
 											<Form.Group>
 												<Form.Label>Upload any Image</Form.Label>
