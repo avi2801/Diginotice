@@ -11,8 +11,6 @@ import { Component } from 'react';
 
 class App extends Component {
 
-
-
   render() {
     return (
 
@@ -22,7 +20,7 @@ class App extends Component {
         <Route exact path="/" component={Home} />
         {/* <Route path="/noticeboard" component={NoticeBoard}  /> */}
           <Route path="/login" component={NoticeBoard} />
-          {/* <Route path= "/signup" component={SignUp}/> */}
+          <Route path= "/signup" component={SignUp}/>
         </BrowserRouter >
         </div>
 

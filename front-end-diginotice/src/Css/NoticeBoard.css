@@ -54,4 +54,18 @@ button.addButton.btn.btn-primary
 	font-style: italic;
 	font-size: large;
 	display:block;
+	margin-top:2%;
+}
+.date
+{
+	text-align: right;
+}
+.card-text{
+	border: 1px solid rgb(246, 240, 240) !important;
+	padding:2% !important;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+     rgba(60, 60, 60, 0.3) 0px 30px 60px -30px,
+     rgba(89, 90, 92, 0.35) 0px -2px 6px 0px inset !important;
+	 background-color: #ffffff;
+	 color:rgb(0, 0, 0) !important;
 }

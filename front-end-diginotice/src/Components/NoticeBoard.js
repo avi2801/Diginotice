@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Modal, ThemeProvider } from "react-bootstrap";
 import Diginotice from '../abis/Diginotice.json';
+import User from '../abis/User.json';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Css/NoticeBoard.css'
 import Web3 from 'web3'
@@ -10,6 +11,10 @@ class NoticeBoard extends Component {
 	async componentDidMount() {
 		this.loadWeb3()
 		this.loadBlockchainData()
+	}
+	componentDidUpdate()
+	{
+		this.teacherStudentValidation();
 	}
 	constructor(props) {
 		super(props)
@@ -26,9 +31,17 @@ class NoticeBoard extends Component {
 			title: " ",
 			img:" ",
 			posts: [],
+			teacher: [],
+			student:[],
 			result1: [],
+			teacherName: '',
+			studentName: '',
+			studentCount: null,
+			teacherCount:null,
 			date:'',
-			show: false
+			show: false,
+			edit: 2,
+			ampm:""
 		}
 	}
 
@@ -49,28 +62,27 @@ class NoticeBoard extends Component {
 	async loadBlockchainData() {
 		const web3 = window.Web3
 		const accounts = await new web3.eth.getAccounts()
-		console.log(accounts)
-
-		//console.log(accounts[0])
+		const networkId = await web3.eth.net.getId()
+		const networkData = Diginotice.networks[networkId]
 		this.setState({
 			account: accounts[0]
 		})
-		console.log(accounts[0])
-		const teacher = "0xD8Cfd4F64106C80992d6A67943c0379ddEfd5306";
-		const student = "0x3a2856F9515f61bD45DBDcF1AAf87Bcb341705C0";
-		if (accounts[0] === teacher)
+		const profile = await this.teacherStudentValidation(networkId, web3)
+		console.log(this.state.teacherName,"teacher1")
+		if (profile[0] === 1)
 		{
 			this.setState({
-				designation: "Avinash"
+				edit:profile[0],
+				designation: profile[1]
 			})
 		}
 		else  {
 			this.setState({
-				designation:"Iraa"
+				edit:profile[0],
+				designation: profile[1]
 			})
 		}
-		const networkId = await web3.eth.net.getId()
-		const networkData = Diginotice.networks[networkId]
+
 		if (networkData) {
 			const diginotice = new web3.eth.Contract(Diginotice.abi, networkData.address)
 			const postCount = await diginotice.methods.postCount().call()
@@ -92,8 +104,49 @@ class NoticeBoard extends Component {
 		}
 	}
 
-	accounts = () => {
+	async teacherStudentValidation(networkId, web3) {
+		console.log("teacheStudent")
+		const networkData1 = User.networks[networkId]
+		console.log("network",networkData1)
+		if (networkData1)
+		{
+			const user = new web3.eth.Contract(User.abi, networkData1.address)
+			console.log(user,"User")
+			const studentCount = await user.methods.studentCount().call()
+			const teacherCount = await user.methods.teacherCount().call()
+			this.setState({})
+			console.log("Teacher Count",teacherCount)
 
+			for (var i = 1; i <= teacherCount; i++) {
+				const teacher = await user.methods.teachers(i).call()
+				console.log(teacher, "Teacher")
+				console.log("Account",this.state.account)
+				if (this.state.account == teacher.address1) {
+					console.log("Teacher check",teacher.name)
+
+
+					console.log(this.state.teacherName,"TeacherName",this.state.edit)
+					return [0,teacher.name]
+				}
+
+
+			}
+
+			for (var i = 1; i <= studentCount; i++) {
+				const student = await user.methods.students(i).call()
+				if (this.state.account === student.address1) {
+
+					return [1,""]
+				}
+			}
+			if (this.state.edit > 1)
+			{
+				alert("You are not allowed in this network please contact adminstractor")
+				window.location.href = "http://localhost:3000"
+
+			}
+
+		}
 
 
 	}
@@ -152,6 +205,10 @@ class NoticeBoard extends Component {
 			const current = new Date();
 			const date1 = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
 			const time1 = `${current.getHours()}:${current.getMinutes()}`;
+			this.setState({
+				ampm : (current.getHours() >= 12) ? "PM" : "AM"
+			})
+
 			console.log(date1);
 			if (error) {
 				console.log(error)
@@ -190,9 +247,9 @@ class NoticeBoard extends Component {
 							<div className="col-8">
 								<h1 className="text-center">Dayananda Sagar College of Engineering</h1>
 								<h3 className="text-center">ISE Department</h3>
-								<Button className="addButton" onClick={this.changeF}>
+								{!this.state.edit && <Button className="addButton" onClick={this.changeF}>
 									New Notice or Announcement
-								</Button>
+								</Button>}
 								{/* <div className="card card-arrangement" >
 									<div className="card-body">
 
@@ -214,13 +271,15 @@ class NoticeBoard extends Component {
 									return (
 										<div className="card card-arrangement" >
 											<div className="card-body">
-												<p>{p1.date}</p>
-												<p>{p1.time}</p>
-											<img className="card-img" src={`https://ipfs.infura.io/ipfs/${p1.imageHash}`} alt="img"/>
+												<p className="text-muted date">Time: {p1.time} -  Date: {p1.date}</p>
+												<img className="card-img" src={`https://ipfs.infura.io/ipfs/${p1.imageHash}`} alt="img" />
+												<span id="message">Message</span>
 												<h5 className="card-title">{p1.title}</h5>
-												<p className="card-text"><span id='year'>Year</span>{p1.year}</p>
-												<p className="card-text"><span id='message'>Message </span>{p1.message}</p>
-												<p className="card-text"><span id='designation'>Designation </span>{p1.teacher}</p>
+												<p className="card-text">{p1.message}</p>
+												<span id='year'>Year</span>
+												<p className="card-text">{p1.year}</p>
+												<span id='designation'>Teacher's Name </span>
+												<p className="card-text">{p1.teacher}</p>
 
 												{/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
 											</div>
