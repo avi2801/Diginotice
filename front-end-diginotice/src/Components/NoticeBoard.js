@@ -6,7 +6,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Css/NoticeBoard.css'
 import Web3 from 'web3'
 const ipfsClient = require('ipfs-http-client');
-const ipfs = ipfsClient({host:'ipfs.infura.io',port:5001,protocol:'https'})
+// put up your project ID
+const projectId = ''
+// put up your project Secret
+const projectSecret = ''
+const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+const ipfs = ipfsClient({host:'ipfs.infura.io',port:5001,protocol:'https',headers: {
+	authorization: auth || 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64')
+  }})
 class NoticeBoard extends Component {
 	async componentDidMount() {
 		this.loadWeb3()
